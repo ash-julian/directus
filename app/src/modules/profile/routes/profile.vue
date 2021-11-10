@@ -23,7 +23,7 @@
 						</v-card>
 					</v-tab-item> -->
 
-					<v-tab-item>
+					<v-tab-item v-if="profile">
 						<template v-for="(item, index) in profile" :key="index">
 							<v-card>
 								<v-card-title>Profile Information</v-card-title>
@@ -42,7 +42,7 @@
 						</template>
 					</v-tab-item>
 
-					<v-tab-item>
+					<v-tab-item v-if="license">
 						<v-card>
 							<v-card-title>License Information</v-card-title>
 							<v-card-text>
@@ -56,7 +56,7 @@
 						</v-card>
 					</v-tab-item>
 
-					<v-tab-item>
+					<v-tab-item v-if="education">
 						<template v-for="(item, index) in education" :key="index">
 							<v-card>
 								<v-card-title>Education Information</v-card-title>
@@ -95,9 +95,24 @@ export default {
 	},
 
 	async mounted() {
-		this.profile = await api.get('/items/Profile');
-		this.education = await api.get('/items/education');
-		this.license = await api.get('/items/license');
+		try {
+			this.profile = await api.get('/items/Profile');
+		} catch (err) {
+			/* eslint-disable no-console */
+			console.error(err);
+		}
+
+		try {
+			this.license = await api.get('/items/license');
+		} catch (err) {
+			console.error(err);
+		}
+
+		try {
+			this.education = await api.get('/items/education');
+		} catch (err) {
+			console.error(err);
+		}
 
 		this.profile = this.profile.data.data;
 		this.education = this.education.data.data;
